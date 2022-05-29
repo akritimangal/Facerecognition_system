@@ -9,6 +9,7 @@ from datetime import datetime
 # from PIL import ImageGrab
 
 path = 'ImagesAttendance'
+# Initialize some variables
 images = []
 classNames = []
 myList = os.listdir(path)
@@ -28,6 +29,8 @@ def findEncodings(images):
         encodeList.append(encode)
     return encodeList
 
+#markAttendance is a function that requires only one input which is the name of the user.
+# We can use the datetime class in the date time package to get the current time.
 
 def markAttendance(name):
     with open('Attendance.csv', 'r+') as f:
@@ -59,6 +62,8 @@ def loopfunction():
     while True:
         success, img = cap.read()
         # img = captureScreen()
+        
+        # Resize frame of video to 1/4 size for faster face recognition processing
         imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)
         imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
@@ -70,6 +75,8 @@ def loopfunction():
             faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
             # print(faceDis)
             matchIndex = np.argmin(faceDis)
+            
+            #we can label unknown faces with the help of using below if-else structure.
 
             if faceDis[matchIndex] < 0.50:
                 name = classNames[matchIndex].upper()
@@ -78,8 +85,11 @@ def loopfunction():
                 name = 'Unknown'
             print(name)
             y1, x2, y2, x1 = faceLoc
+             # Scale back up face locations since the frame we detected in was scaled to 1/4 size
             y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
+              # Draw a box around the face
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            # Draw a label with a name below the face
             cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
             cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
