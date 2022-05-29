@@ -5,19 +5,18 @@ import face_recognition
 import os
 from datetime import datetime
 
-
-# from PIL import ImageGrab
+#defining path of input images
 
 path = 'ImagesAttendance'
 # Initialize some variables
-images = []
-classNames = []
+images = []                  # LIST CONTAINING ALL THE IMAGES
+classNames = []              # LIST CONTAINING ALL THE CORRESPONDING CLASS Names
 myList = os.listdir(path)
 print(myList)
 for cl in myList:
     curImg = cv2.imread(f'{path}/{cl}')
     images.append(curImg)
-    classNames.append(os.path.splitext(cl)[0])
+    classNames.append(os.path.splitext(cl)[0])              #used to print only name (Elon Musk) not full class names(Elon Musk.jpg)
 print(classNames)
 
 
