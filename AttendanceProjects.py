@@ -1,4 +1,4 @@
-
+#Importing required libraries
 import cv2
 import numpy as np
 import face_recognition
@@ -19,7 +19,8 @@ for cl in myList:
     classNames.append(os.path.splitext(cl)[0])              #used to print only name (Elon Musk) not full class names(Elon Musk.jpg)
 print(classNames)
 
-
+#we will first convert it into RGB and then find its encoding using the face_encodings() function.
+#Then we will append each encoding to our list.
 def findEncodings(images):
     encodeList = []
     for img in images:
@@ -50,12 +51,15 @@ def markAttendance(name):
 #     capScr = cv2.cvtColor(capScr, cv2.COLOR_RGB2BGR)
 #     return capScr
 
+
+ #calling findEncodings function with the images list as the input arguments
 encodeListKnown = findEncodings(images)
 print('Encoding Complete')
 
 
 
 def loopfunction():
+     #a video capture object cap defined so that we can grab frames from the webcam.
     cap = cv2.VideoCapture(0)
     
     while True:
@@ -68,11 +72,16 @@ def loopfunction():
 
         facesCurFrame = face_recognition.face_locations(imgS)
         encodesCurFrame = face_recognition.face_encodings(imgS, facesCurFrame)
+        
+        
+        #we can match the current face encodings to our known faces encoding list to find the matches
 
         for encodeFace, faceLoc in zip(encodesCurFrame, facesCurFrame):
             matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
             faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
             # print(faceDis)
+            
+            #finding minimum face distance
             matchIndex = np.argmin(faceDis)
             
             #we can label unknown faces with the help of using below if-else structure.
